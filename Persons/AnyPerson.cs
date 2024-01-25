@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -160,6 +161,7 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
             transform.localPosition = OffPlace;
             transform.SetParent(game.AtHome.transform);
             transform.gameObject.SetActive(false);
+            game.PeopleInCafe -= 1;
         }
     }
     public void ForAngryClient()
@@ -258,7 +260,11 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
         OnGoing(walkLayer, false);
         IsWalking = true;
     }
-    public void Checking()
+    public void CheckingForDrags()
+    {
+        if (dg.isDragging) { Checking(); }
+    }
+    private void Checking()
     {
         if (!IsWalking && dg.SelectedObject.TryGetComponent(out fc))
         {
@@ -333,9 +339,5 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
         faceSR.sprite = face[emotion];
         audioSource.clip = clip;
         if (play) { audioSource.Play(); }
-    }
-    private void OnDisable()
-    {
-        game.PeopleInCafe -= 1;
     }
 } //397

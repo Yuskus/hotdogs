@@ -79,12 +79,9 @@ public class DraggingComponent : MonoBehaviour
     }
     public void MousePos(GameObject thisObj, Vector2 pos) //компонент перетаскивания, перетаскивание объекта-ссылки мышью, пальцем
     {
-        if (dg.isDragging)
-        {
-            m2d = cam.ScreenToWorldPoint(pos);
-            thisObj.transform.position = m2d;
-            HOtr.position = dg.SelectedObject.transform.position;
-        }
+        m2d = cam.ScreenToWorldPoint(pos);
+        thisObj.transform.position = m2d;
+        HOtr.position = dg.SelectedObject.transform.position;
     }
     public void AddSauce(GameObject obj, SpriteRenderer sR, ref bool addedK, ref bool addedG, ref bool addedO) //компонент перетаскивания, добавляет соус на хот дог/бургер
     {
@@ -132,12 +129,15 @@ public class DraggingComponent : MonoBehaviour
         dg.SelectedObject.transform.GetComponent<BoxCollider2D>().enabled = true;
         return hit;
     }
-    public void TakeHelpObjectInHand(SpriteRenderer sR)
+    public void TakeObjectInHand(SpriteRenderer sR)
     {
         sR.sortingLayerID = inHand;
+        HOsr.sortingLayerID = onTable;
     }
-    public void BackHelpObjectAtPlace()
+    public void TakeObjectInHand(SpriteRenderer sR, SpriteRenderer[] sons)
     {
+        sR.sortingLayerID = inHand;
+        for (int i = 0; i < 3; i++) { sons[i].sortingLayerID = inHand; }
         HOsr.sortingLayerID = onTable;
     }
     private void ForSelectingList()

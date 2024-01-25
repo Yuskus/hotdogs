@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -87,20 +88,16 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (eventData.pointerId == 0)
+        if (eventData.pointerId == 0 && !dg.isDragging)
         {
-            if (!dg.isDragging)
-            {
-                drag.TakeHelpObjectInHand(sR);
-                drag.BackHelpObjectAtPlace();
-                timer = false;
-                dg.isDragging = true;
-            }
+            drag.TakeObjectInHand(sR);
+            timer = false;
+            dg.isDragging = true;
         }
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if (eventData.pointerId == 0)
+        if (eventData.pointerId == 0 && dg.isDragging)
         {
             if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
             else { dg.isDragging = false; }
@@ -110,15 +107,19 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     {
         if (dg.SelectedObject == transform.gameObject)
         {
-            dg.isDragging = false;
-            timer = true;
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { GetComponent<MyStartPlace>().BackHomeAsSelected(); return; }
+            if (hit.collider == null) { BackHome(); return; }
             else if (hit.transform.gameObject.name == "HotDog") { FoodIsDone(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashVoid(); }
-            else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else { BackHome(); }
         }
-        else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+        else { BackHome(); }
+        dg.isDragging = false;
+    }
+    private void BackHome()
+    {
+        GetComponent<MyStartPlace>().BackHomeAsSelected();
+        timer = true;
     }
     private void FoodIsDone()
     {

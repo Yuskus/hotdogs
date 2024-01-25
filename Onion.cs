@@ -82,17 +82,16 @@ public class Onion : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (eventData.pointerId == 0)
+        if (eventData.pointerId == 0 && !dg.isDragging)
         {
-            drag.TakeHelpObjectInHand(sR);
-            drag.BackHelpObjectAtPlace();
+            drag.TakeObjectInHand(sR);
             timer = false;
             dg.isDragging = true;
         }
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if (eventData.pointerId == 0)
+        if (eventData.pointerId == 0 && dg.isDragging)
         {
             if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
             else { dg.isDragging = false; }
@@ -102,14 +101,12 @@ public class Onion : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
     {
         if (dg.SelectedObject == transform.gameObject)
         {
-            dg.isDragging = false;
-            timer = true;
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { GetComponent<MyStartPlace>().BackHomeAsSelected(); return; }
+            if (hit.collider == null) { BackHome(); return; }
             else if (hit.transform.gameObject.name == "HotDog") { hit.transform.GetComponent<CreatedBulka>().AddSauce(); added = true; }
             else if (hit.transform.gameObject.name == "Burger") { hit.transform.GetComponent<CreatedBurger>().AddSauce(); added = true; }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashVoid(); }
-            GetComponent<MyStartPlace>().BackHomeAsSelected();
+            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            BackHome();
             if (added)
             {
                 if (hit.transform.GetComponent<SpriteRenderer>().sprite.name is not "Bulochka" or "BulkaBurger") //check
@@ -119,6 +116,12 @@ public class Onion : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
                 added = false;
             }
         }
-        else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+        else { BackHome(); }
+        dg.isDragging = false;
+    }
+    private void BackHome()
+    {
+        GetComponent<MyStartPlace>().BackHomeAsSelected();
+        timer = true;
     }
 }

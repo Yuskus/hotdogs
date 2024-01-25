@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
+public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler, IBeginDragHandler
 {
     private DraggingComponent drag;
     private Drag dg;
@@ -44,36 +44,38 @@ public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, I
             }
         }
     }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (spRen.sprite.name != "BulkaBurger" && eventData.pointerId == 0 && !dg.isDragging)
+        {
+            drag.TakeObjectInHand(spRen, son);
+            dg.isDragging = true;
+        }
+    }
     public void OnDrag(PointerEventData eventData)
     {
-        if (spRen.sprite.name != "BulkaBurger")
+        if (eventData.pointerId == 0 && dg.isDragging)
         {
-            if (eventData.pointerId == 0)
-            {
-                if (!dg.isDragging)
-                {
-                    drag.TakeHelpObjectInHand(spRen);
-                    for (int i = 0; i < 3; i++) { drag.TakeHelpObjectInHand(son[i]); }
-                    drag.BackHelpObjectAtPlace();
-                    dg.isDragging = true;
-                }
-                else if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
-                else { dg.isDragging = false; }
-            }
+            if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
+            else { dg.isDragging = false; }
         }
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (dg.SelectedObject == transform.gameObject & spRen.sprite.name != "BulkaBurger")
+        if (dg.SelectedObject == transform.gameObject && spRen.sprite.name != "BulkaBurger")
         {
-            dg.isDragging = false;
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { GetComponent<MyStartPlace>().BackHomeSelectedWithSauce(); return; }
-            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().Checking(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashVoid(); }
-            else { GetComponent<MyStartPlace>().BackHomeSelectedWithSauce(); }
+            if (hit.collider == null) { BackHome(); return; }
+            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().CheckingForDrags(); }
+            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else { BackHome(); }
         }
-        else { GetComponent<MyStartPlace>().BackHomeSelectedWithSauce(); }
+        else { BackHome(); }
+        dg.isDragging = false;
+    }
+    private void BackHome()
+    {
+        GetComponent<MyStartPlace>().BackHomeSelectedWithSauce();
     }
     public void AddSauce()
     {

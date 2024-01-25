@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Free : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
+public class Free : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler, IBeginDragHandler
 {
     private DraggingComponent drag;
     private Drag dg;
@@ -20,17 +20,20 @@ public class Free : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHa
             dg.SelectedObject = transform.gameObject;
         }
     }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        
+        if (eventData.pointerId == 0 && !dg.isDragging)
+        {
+            drag.TakeObjectInHand(spRen);
+            dg.isDragging = true;
+        }
+    }
     public void OnDrag(PointerEventData eventData)
     {
-        if (eventData.pointerId == 0)
+        if (eventData.pointerId == 0 && dg.isDragging)
         {
-            if (!dg.isDragging)
-            {
-                drag.TakeHelpObjectInHand(spRen);
-                drag.BackHelpObjectAtPlace();
-                dg.isDragging = true;
-            }
-            else if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
+            if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
             else { dg.isDragging = false; }
         }
     }
@@ -38,12 +41,16 @@ public class Free : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHa
     {
         if (dg.SelectedObject == transform.gameObject)
         {
-            dg.isDragging = false;
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { GetComponent<MyStartPlace>().BackHomeAsSelected(); return; }
-            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().Checking(); }
-            else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+            if (hit.collider == null) { BackHome(); return; }
+            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().CheckingForDrags(); }
+            else { BackHome(); }
         }
-        else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+        else { BackHome(); }
+        dg.isDragging = false;
+    }
+    private void BackHome()
+    {
+        GetComponent<MyStartPlace>().BackHomeAsSelected();
     }
 }

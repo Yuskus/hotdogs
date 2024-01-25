@@ -24,7 +24,11 @@ public class Trash : MonoBehaviour, IPointerDownHandler
     {
         if (!dg.isDragging) { TrashVoid(); }
     }
-    public void TrashVoid() //мусорка 0
+    public void TrashForDrags()
+    {
+        if (dg.isDragging) { TrashVoid(); }
+    }
+    private void TrashVoid() //мусорка 0
     {
         if (dg.SelectedObject.CompareTag("FoodForTrash"))
         {

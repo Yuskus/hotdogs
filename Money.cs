@@ -39,6 +39,8 @@ public class Money : MonoBehaviour, IPointerDownHandler
                 transform.gameObject.SetActive(false);
             }
         }
+        sound.Play();
+        game.MoneyOnTable -= 1;
     }
     public void WritingInPrice(int value)
     {
@@ -65,9 +67,4 @@ public class Money : MonoBehaviour, IPointerDownHandler
     }
     private void SetAct(int num, bool active) => game.Interactive.transform.GetChild(1).GetChild(num).GetChild(1).gameObject.SetActive(active); //money
     private void TextIs(int num, int price, string text) => game.Interactive.transform.GetChild(1).GetChild(num).GetChild(1).GetComponent<TextMeshPro>().text = text + price; //money
-    private void OnDisable()
-    {
-        sound.Play();
-        game.MoneyOnTable -= 1;
-    }
 }

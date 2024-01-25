@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CreatedKotlet : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
+public class CreatedKotlet : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler, IBeginDragHandler
 {
     private DraggingComponent drag;
     private Drag dg;
@@ -80,18 +80,20 @@ public class CreatedKotlet : MonoBehaviour, IDragHandler, IPointerDownHandler, I
             dg.SelectedObject = transform.gameObject;
         }
     }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (eventData.pointerId == 0 && !dg.isDragging)
+        {
+            drag.TakeObjectInHand(sR);
+            timer = false;
+            dg.isDragging = true;
+        }
+    }
     public void OnDrag(PointerEventData eventData)
     {
-        if (eventData.pointerId == 0)
+        if (eventData.pointerId == 0 && dg.isDragging)
         {
-            if (!dg.isDragging)
-            {
-                drag.TakeHelpObjectInHand(sR);
-                drag.BackHelpObjectAtPlace();
-                timer = false;
-                dg.isDragging = true;
-            }
-            else if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
+            if (dg.SelectedObject == transform.gameObject) { drag.MousePos(transform.gameObject, eventData.position); }
             else { dg.isDragging = false; }
         }
     }
@@ -99,19 +101,22 @@ public class CreatedKotlet : MonoBehaviour, IDragHandler, IPointerDownHandler, I
     {
         if (dg.SelectedObject == transform.gameObject)
         {
-            dg.isDragging = false;
-            timer = true;
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { GetComponent<MyStartPlace>().BackHomeAsSelected(); return; }
+            if (hit.collider == null) { BackHome(); return; }
             else if (hit.transform.gameObject.name == "Burger") { FoodIsDone(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashVoid(); }
-            else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else { BackHome(); }
         }
-        else { GetComponent<MyStartPlace>().BackHomeAsSelected(); }
+        else { BackHome(); }
+        dg.isDragging = false;
+    }
+    private void BackHome()
+    {
+        GetComponent<MyStartPlace>().BackHomeAsSelected();
+        timer = true;
     }
     private void FoodIsDone()
     {
         drag.MakeFoodDone("Kotlet", hit.transform.GetComponent<SpriteRenderer>(), drag.kotleta, drag.burger);
-        //drag.ForSelecting();
     }
 }
