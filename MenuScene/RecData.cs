@@ -19,7 +19,6 @@ public static class RecData
     public static readonly int canCookSauseG = 20;
     public static readonly int canCookOnion = 30;
     public static bool youCompletedTheGame = false;
-    public static int theLastLevelIs = lvlRec.Length;
     public static int ContinueGame
     {
         get { return continueGame; }
@@ -37,29 +36,6 @@ public static class RecData
             if (value < lvlRec.Length) { availableLevels = value; }
             else if (value == lvlRec.Length) { youCompletedTheGame = true; }
         }
-    }
-    public static void SaveLastLevel(int nowLevel)
-    {
-        ContinueGame = nowLevel + 1;
-        PlayerPrefs.SetInt(continueKey, ContinueGame);
-        PlayerPrefs.Save();
-    }
-    public static void LoadLastLevel()
-    {
-        if (PlayerPrefs.HasKey(continueKey)) { ContinueGame = PlayerPrefs.GetInt(continueKey); }
-    }
-    public static void SaveOpenedLevel(int openedLevel) //в конце каждого уровня при сохранении рекорда
-    {
-        if (AvailableLevels == openedLevel)
-        {
-            AvailableLevels++;
-            PlayerPrefs.SetInt(availableKey, AvailableLevels);
-            PlayerPrefs.Save();
-        }
-    }
-    public static void LoadOpenedLevel() //в сцене меню
-    {
-        if (PlayerPrefs.HasKey(availableKey)) { AvailableLevels = PlayerPrefs.GetInt(availableKey); }
     }
     public static void SaveStateOfSound()
     {
@@ -105,19 +81,31 @@ public static class RecData
     {
         return PlayerPrefs.GetInt(keyForLevel[level], 0);
     }
+    public static void LoadMySaving()
+    {
+        if (PlayerPrefs.HasKey(availableKey)) { AvailableLevels = PlayerPrefs.GetInt(availableKey); }
+        if (PlayerPrefs.HasKey(continueKey)) { ContinueGame = PlayerPrefs.GetInt(continueKey); }
+        LoadAllLevelsRecords();
+        LoadStateOfSound();
+    }
     public static void SavingAtTheEndOfLevel(int mySalary, int level, string key)
     {
         if (mySalary > plans[level])
         {
-            SaveOpenedLevel(level);
-            SaveLastLevel(level);
+            if (AvailableLevels == level)
+            {
+                AvailableLevels++;
+                PlayerPrefs.SetInt(availableKey, AvailableLevels);
+            }
+            ContinueGame = level + 1;
+            PlayerPrefs.SetInt(continueKey, ContinueGame);
         }
         if (mySalary > lvlRec[level])
         {
             lvlRec[level] = mySalary;
             PlayerPrefs.SetInt(key, lvlRec[level]);
-            PlayerPrefs.Save();
         }
+        PlayerPrefs.Save();
     }
     public static void StartOrRetryLevel(int level)
     {

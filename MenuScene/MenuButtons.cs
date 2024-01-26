@@ -43,10 +43,7 @@ public class MenuButtons : MonoBehaviour //
         offset = 0;
         offset2 = -35;
         Camera.main.GetComponent<FocusCamera>().CameraPos(Camera.main);
-        RecData.LoadLastLevel();
-        RecData.LoadOpenedLevel();
-        RecData.LoadAllLevelsRecords();
-        RecData.LoadStateOfSound();
+        RecData.LoadMySaving();
         ButtonSoundSwitcher();
         if (RecData.IsAllLevelsCompleted()) { ButtonFire.SetActive(true); }
     }
@@ -86,7 +83,6 @@ public class MenuButtons : MonoBehaviour //
     }
     public void ButtonContinue()
     {
-        if (RecData.ContinueGame == RecData.theLastLevelIs) { RecData.SaveLastLevel(0); }
         SceneManager.LoadScene("GameLevel1");
     }
     public void ButtonForAllTime()
