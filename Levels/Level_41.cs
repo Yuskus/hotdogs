@@ -5,7 +5,6 @@ public class Level_41 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
     private Game game;
     private LearningPointer lp;
     private readonly int levelNum = 40;
-    private readonly string levelKey = "Rec_41";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -14,7 +13,7 @@ public class Level_41 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
     private void Start()
     {
         game.StartAnyLevel();
-        if (RecData.ContinueGame == RecData.AvailableLevels) { Learning(); }
+        if (Game.TimelyContinue == Game.TimelyAvailable) { Learning(); }
         else
         {
             game.TabloOn();
@@ -44,5 +43,5 @@ public class Level_41 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
         lp.WriteText("Обратите внимание на новый ингридиент: газировка!");
         Invoke(nameof(AlmostGo), 4f);
     }
-    private void Go() => game.TheFirstFew(9, 2.5f, 3.4f, 4, levelKey, levelNum); //CHECK
+    private void Go() => game.TheFirstFew(9, 2.5f, 3.4f, 4, levelNum); //CHECK
 }

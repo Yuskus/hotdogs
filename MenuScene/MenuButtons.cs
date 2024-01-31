@@ -5,10 +5,11 @@ using UnityEngine.EventSystems;
 
 public class MenuButtons : MonoBehaviour //
 {
+    private MyData data;
     private GameObject Canvas, Panel1, Panel2, Panel3, Panel4, PanelLevels, MovingForest, Fire;
     private Transform FonTr, Fon2Tr, circle1, circle2;
     private GameObject ButtonFire;
-    private int allTimeSalary;
+    public static int allTimeSalary;
     private float offset, offset2, step, circleStep;
     private bool move;
     private AudioClip[] audioClip;
@@ -43,9 +44,11 @@ public class MenuButtons : MonoBehaviour //
         offset = 0;
         offset2 = -35;
         Camera.main.GetComponent<FocusCamera>().CameraPos(Camera.main);
-        RecData.LoadMySaving();
+        data = GameObject.FindGameObjectWithTag("Saving").GetComponent<MyData>();
+        data.CustomStart();
+        RecData.LoadStateOfSound();
         ButtonSoundSwitcher();
-        if (RecData.IsAllLevelsCompleted()) { ButtonFire.SetActive(true); }
+        if (data.LvlRec[^1] > RecData.plans[^1]) { ButtonFire.SetActive(true); }
     }
     private void MovingCircle()
     {
@@ -87,7 +90,7 @@ public class MenuButtons : MonoBehaviour //
     }
     public void ButtonForAllTime()
     {
-        RecData.CountAllLevelsRecords(out allTimeSalary);
+        data.RecSum(out allTimeSalary);
         Panel4.transform.GetChild(0).GetComponent<Text>().text = "Your Salary For All Time:\n\n" + allTimeSalary;
     }
     public void ButtonSettingsOrClosePanel1()
@@ -105,7 +108,7 @@ public class MenuButtons : MonoBehaviour //
     }
     public void DeleteRecords() //если согласился удалить рекорды
     {
-        RecData.DeleteRecords();
+        data.ResetData();
         ButtonOpenOrClosePanel2();
     }
     public void MakeButtonsBlocked() => ButtonsRaycast(false);
@@ -138,7 +141,7 @@ public class MenuButtons : MonoBehaviour //
     }
     public void ButtonForChoosingLevel()
     {
-        RecData.StartOrRetryLevel(EventSystem.current.currentSelectedGameObject.transform.GetSiblingIndex());
+        data.ContinueGame = EventSystem.current.currentSelectedGameObject.transform.GetSiblingIndex();
         SceneManager.LoadScene("GameLevel1");
     }
     public void SaveDog()

@@ -12,7 +12,7 @@ public class StartPotato : MonoBehaviour, IPointerDownHandler
     private AudioSource audioSource;
     private void Awake()
     {
-        if (RecData.ContinueGame < RecData.canCookFree || RecData.ContinueGame < 15 && RecData.ContinueGame > 9)
+        if (Game.TimelyContinue < RecData.canCookFree || Game.TimelyContinue < 15 && Game.TimelyContinue > 9)
         {
             transform.gameObject.SetActive(false);
         }

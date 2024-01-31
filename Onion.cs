@@ -103,25 +103,39 @@ public class Onion : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
         {
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
-            else if (hit.transform.gameObject.name == "HotDog") { hit.transform.GetComponent<CreatedBulka>().AddSauce(); added = true; }
-            else if (hit.transform.gameObject.name == "Burger") { hit.transform.GetComponent<CreatedBurger>().AddSauce(); added = true; }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
-            BackHome();
-            if (added)
-            {
-                if (hit.transform.GetComponent<SpriteRenderer>().sprite.name is not "Bulochka" or "BulkaBurger") //check
-                {
-                    dg.SelectedObject = hit.transform.gameObject;
-                }
-                added = false;
-            }
+            else if (hit.transform.gameObject.name == "HotDog") { SauceForHotDog(); }
+            else if (hit.transform.gameObject.name == "Burger") { SauceForBurger(); }
+            else if (hit.transform.gameObject.name == "Trash") { Trash(); }
         }
-        else { BackHome(); }
+        BackHome();
+    }
+    private void SauceForHotDog()
+    {
+        hit.transform.GetComponent<CreatedBulka>().AddSauce();
+        if (hit.transform.GetComponent<SpriteRenderer>().sprite.name != "Bulochka")
+        {
+            dg.SelectedObject = hit.transform.gameObject;
+        }
+        dg.isDragging = false;
+    }
+    private void SauceForBurger()
+    {
+        hit.transform.GetComponent<CreatedBurger>().AddSauce();
+        if (hit.transform.GetComponent<SpriteRenderer>().sprite.name != "BulkaBurger")
+        {
+            dg.SelectedObject = hit.transform.gameObject;
+        }
+        dg.isDragging = false;
+    }
+    private void Trash()
+    {
+        hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
+        dg.isDragging = false;
         timer = true;
     }
 }

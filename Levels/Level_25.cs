@@ -4,7 +4,6 @@ public class Level_25 : MonoBehaviour //кетчуп,сосиски,булки - 3 стрелки - досту
 {
     private Game game;
     private readonly int levelNum = 24;
-    private readonly string levelKey = "Rec_25";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_25 : MonoBehaviour //кетчуп,сосиски,булки - 3 стрелки - досту
     {
         game.TimerForLevel();
     }
-    public void Go() => game.TheFirstFew(6, 2.9f, 3.6f, 3, levelKey, levelNum);
+    public void Go() => game.TheFirstFew(6, 2.9f, 3.6f, 3, levelNum);
 }

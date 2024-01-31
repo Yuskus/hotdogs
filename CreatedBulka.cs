@@ -15,7 +15,7 @@ public class CreatedBulka : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     {
         drag = transform.parent.parent.GetComponent<DraggingComponent>();
         dg = Camera.main.GetComponent<Drag>();
-        if (RecData.ContinueGame == 0 && RecData.AvailableLevels == 0 && transform.GetSiblingIndex() == 0) { transform.gameObject.AddComponent<L_CreatedBulka>(); }
+        if (Game.TimelyContinue == 0 && Game.TimelyAvailable == 0 && transform.GetSiblingIndex() == 0) { transform.gameObject.AddComponent<L_CreatedBulka>(); }
         spRen = GetComponent<SpriteRenderer>();
         son = new SpriteRenderer[3];
         for (int i = 0; i < 3; i++) { son[i] = transform.GetChild(i).GetComponent<SpriteRenderer>(); }
@@ -68,16 +68,26 @@ public class CreatedBulka : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         {
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
-            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().CheckingForDrags(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else if (hit.transform.parent.gameObject.name == "OnScene") { Checking(); }
+            else if (hit.transform.gameObject.name == "Trash") { Trash(); }
             else { BackHome(); }
         }
         else { BackHome(); }
+    }
+    private void Checking()
+    {
+        hit.transform.GetComponent<AnyPerson>().CheckingForDrags();
+        dg.isDragging = false;
+    }
+    private void Trash()
+    {
+        hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeSelectedWithSauce();
+        dg.isDragging = false;
     }
     public void AddSauce()
     {

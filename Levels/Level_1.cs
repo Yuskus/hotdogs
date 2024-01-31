@@ -5,7 +5,6 @@ public class Level_1 : MonoBehaviour //кетчуп,сосиски,булки - 3 стрелки - доступ
     private Game game;
     private LearningPointer lp;
     private readonly int levelNum = 0;
-    private readonly string levelKey = "Rec_01";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -14,7 +13,7 @@ public class Level_1 : MonoBehaviour //кетчуп,сосиски,булки - 3 стрелки - доступ
     private void Start()
     {
         game.StartAnyLevel();
-        if (RecData.ContinueGame == RecData.AvailableLevels) { Learning(); }
+        if (levelNum == Game.TimelyAvailable) { Learning(); }
         else
         {
             game.TabloOn();
@@ -33,7 +32,7 @@ public class Level_1 : MonoBehaviour //кетчуп,сосиски,булки - 3 стрелки - доступ
         game.StoikaOnly.transform.GetChild(16).GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
         Invoke(nameof(Go), 4f);
     }
-    public void Go() => game.TheFirstFew(3, 3.4f, 4.1f,2,levelKey, levelNum);
+    public void Go() => game.TheFirstFew(3, 3.4f, 4.1f, 2, levelNum);
     private void Learning()
     {
         game.learn = true;

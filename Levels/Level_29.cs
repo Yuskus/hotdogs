@@ -4,7 +4,6 @@ public class Level_29 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
 {
     private Game game;
     private readonly int levelNum = 28;
-    private readonly string levelKey = "Rec_29";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_29 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
     {
         game.TimerForLevel();
     }
-    private void Go() => game.TheFirstFew(7, 2.8f, 3.6f, 3, levelKey, levelNum); //CHECK
+    private void Go() => game.TheFirstFew(7, 2.8f, 3.6f, 3, levelNum); //CHECK
 }

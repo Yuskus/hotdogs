@@ -8,10 +8,11 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour //check
 {
-    private int mySalary, indexOfLevel, AllTimeSalary, _children, _max, _level;
+    private MyData data;
+    private int mySalary, AllTimeSalary, _children, _max, _level;
     private int moneyOnTable, peopleInCafe;
+    public int indexOfLevel;
     private float timerDay, oneSec, _intervalMin, _intervalMax;
-    private string _key;
     private StringBuilder myTimerDisplay, mySalaryDisplay, myRecordDisplay, myPlanDisplay;
     public bool learn;
     private bool makingClients, isLevelEnded, levelIsStarted;
@@ -29,6 +30,8 @@ public class Game : MonoBehaviour //check
     private readonly string[] names = new string[5] { "DrinkClone", "Free", "HotDog", "Burger", "ColaClone" };
     public readonly int[] bonusPrice = new int[16] { 0, 10, 10, 20, 15, 25, 25, 35, 30, 40, 40, 50, 45, 55, 55, 65 };
     public Dictionary<string, Sprite> ForWish { get; private set; }
+    public static int TimelyContinue { get; private set; }
+    public static int TimelyAvailable { get; private set; }
     private float TimerDay
     {
         get { return timerDay; }
@@ -67,7 +70,10 @@ public class Game : MonoBehaviour //check
     }
     private void Awake()
     {
-        indexOfLevel = RecData.ContinueGame + 1; //reeading
+        data = GameObject.FindGameObjectWithTag("Saving").GetComponent<MyData>();
+        TimelyAvailable = data.AvailableLevels;
+        TimelyContinue = data.ContinueGame;
+        indexOfLevel = data.ContinueGame + 1; //reeading
         transform.gameObject.AddComponent(Type.GetType("Level_" + indexOfLevel)); //MenuButtons 44
     }
     private void Start()
@@ -97,7 +103,6 @@ public class Game : MonoBehaviour //check
         AtHome = AllClients.transform.GetChild(0).gameObject;
         OnScene = AllClients.transform.GetChild(1).gameObject;
         Money = Resources.Load<GameObject>("Prefabs/GetMoney");
-        RecData.LoadAllLevelsRecords();
         ForWish = new(forClientsWish.Length);
         for (int i = 0; i < forClientsWish.Length; i++)
         {
@@ -115,11 +120,11 @@ public class Game : MonoBehaviour //check
         halfSecond = new(0.5f);
         learn = false;
         makingClients = false;
-        myPlanDisplay.Append(RecData.MyPlanIs());
+        myPlanDisplay.Append("Plan: " + RecData.plans[data.ContinueGame]);
         Plan.GetComponent<Text>().text = myPlanDisplay.ToString();
-        myRecordDisplay.Append(RecData.MyRecordIs());
+        myRecordDisplay.Append("Record: " + data.LvlRec[data.ContinueGame]); //
         Record.GetComponent<Text>().text = myRecordDisplay.ToString();
-        RecData.CountAllLevelsRecords(out AllTimeSalary);
+        data.RecSum(out AllTimeSalary);
         moneyPan = TextMoney.GetComponent<Text>();
         timePan = Timer.GetComponent<Text>();
         TimerDay = 120f;
@@ -128,17 +133,16 @@ public class Game : MonoBehaviour //check
     public void TabloOn() //главный скрипт для уровней 
     {
         Canvas.transform.GetChild(3).gameObject.SetActive(true);
-        Canvas.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Level: {indexOfLevel} \nPlan: {RecData.plans[RecData.ContinueGame]} \nTime: 2:00 \n\nGood luck!";
+        Canvas.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"Level: {indexOfLevel} \nPlan: {RecData.plans[data.ContinueGame]} \nTime: 2:00 \n\nGood luck!";
         Invoke(nameof(TabloOff), 3f);
     }
     private void TabloOff() => Canvas.transform.GetChild(3).gameObject.SetActive(false); //start table
-    public void TheFirstFew(int children, float intervalMin, float intervalMax, int max, string key, int level) //start coroutines
+    public void TheFirstFew(int children, float intervalMin, float intervalMax, int max, int level) //start coroutines
     {
         _children = children;
         _intervalMin = intervalMin;
         _intervalMax = intervalMax;
         _max = max;
-        _key = key;
         _level = level;
         StartCoroutine(PeopleFew());
     }
@@ -153,7 +157,7 @@ public class Game : MonoBehaviour //check
         }
         while (!makingClients)
         {
-            if (OnScene.transform.GetChild(0).GetComponent<AnyPerson>().TheClientLeaves()) { makingClients = true; }
+            if (OnScene.GetComponent<WhoIsOnScene>().TheLastClient()) { makingClients = true; }
             else { yield return halfSecond; }
         }
         StartCoroutine(PeopleRepeat());
@@ -212,7 +216,7 @@ public class Game : MonoBehaviour //check
             {
                 if (Learn.activeInHierarchy) { Learn.SetActive(false); }
                 ClosePanel.GetComponent<Closed>().TheCafeIsClosing();
-                RecData.SavingAtTheEndOfLevel(MySalary, _level, _key);
+                SaveGame();
             }
             else
             {
@@ -220,5 +224,18 @@ public class Game : MonoBehaviour //check
                 LearnText.text = "Соберите все деньги!";
             }
         }
+    }
+    private void SaveGame()
+    {
+        if (mySalary > RecData.plans[_level])
+        {
+            if (data.AvailableLevels == _level) { data.AvailableLevels++; }
+            data.ContinueGame = _level + 1;
+        }
+        if (mySalary > data.LvlRec[_level])
+        {
+            data.LvlRec[_level] = mySalary;
+        }
+        data.SaveData();
     }
 }

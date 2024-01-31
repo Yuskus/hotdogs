@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ButtonsAndCommands : MonoBehaviour
 {
+    private MyData data;
     private GameObject Canvas, PausePanel;
     private int indexOfLevel;
     private AudioClip[] audioClip;
@@ -12,8 +13,9 @@ public class ButtonsAndCommands : MonoBehaviour
     private void Start()
     {
         Canvas = GameObject.FindGameObjectWithTag("Canvas");
+        data = GameObject.FindGameObjectWithTag("Saving").GetComponent<MyData>();
         PausePanel = Canvas.transform.GetChild(5).gameObject;
-        indexOfLevel = RecData.ContinueGame + 1; //reading
+        indexOfLevel = data.ContinueGame + 1; //reading
         audioClip = new AudioClip[2];
         audioClip[0] = Resources.Load<AudioClip>("Sounds/click");
         audioClip[1] = Resources.Load<AudioClip>("Sounds/crowd");
@@ -57,7 +59,7 @@ public class ButtonsAndCommands : MonoBehaviour
     public void RetryButton() //גûםוסעט מעהוכüםמ
     {
         ExRecordSave(indexOfLevel - 1);
-        RecData.StartOrRetryLevel(indexOfLevel - 1); //writing
+        data.ContinueGame = indexOfLevel - 1;
         SceneManager.LoadScene("GameLevel1");
         Scale(1f);
     }
@@ -82,7 +84,14 @@ public class ButtonsAndCommands : MonoBehaviour
         else { SceneManager.LoadScene("GameLevel1"); }
     }
     private void ToLevelMenu() => SceneManager.LoadScene(0);
-    private void ExRecordSave(int level) { RecData.SaveMyRecord(transform.GetComponent<Game>().MySalary, level); }
+    private void ExRecordSave(int level)
+    {
+        if (transform.GetComponent<Game>().MySalary > data.LvlRec[level])
+        {
+            data.LvlRec[level] = transform.GetComponent<Game>().MySalary;
+            data.SaveData();
+        }
+    }
     public void SoundOfButtons() => audioSource[0].Play();
     public IEnumerator FadeOfSound(float targetVolume)
     {

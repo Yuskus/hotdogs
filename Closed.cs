@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Closed : MonoBehaviour //38 check
 {
+    private MyData data;
     private GameObject EndPanel, Canvas;
     private int levelNum;
     private readonly float yPos = 0f;
@@ -16,12 +17,13 @@ public class Closed : MonoBehaviour //38 check
     private AudioSource audioSource;
     private void Start()
     {
+        data = GameObject.FindGameObjectWithTag("Saving").GetComponent<MyData>();
         IsMoving = false;
         youWin = false;
         transform.localPosition = new Vector2(0, 20);
         Canvas = GameObject.FindGameObjectWithTag("Canvas");
         EndPanel = Canvas.transform.GetChild(1).gameObject;
-        levelNum = RecData.ContinueGame; //reading
+        levelNum = data.ContinueGame; //reading
         audioClip = Resources.Load<AudioClip>("Sounds/closed");
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = audioClip;
@@ -46,7 +48,7 @@ public class Closed : MonoBehaviour //38 check
     }
     private void IsClosed()
     {
-        RecData.CountAllLevelsRecords(out allTimeSalary);
+        data.RecSum(out allTimeSalary);
         EndPanel.SetActive(true); //on endgame panel
         MySalary = Camera.main.GetComponent<Game>().MySalary; //save salary
         if (MySalary >= RecData.plans[levelNum]) { winLoseText = "Good day!"; youWin = true; }

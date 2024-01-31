@@ -5,7 +5,6 @@ public class Level_3 : MonoBehaviour
     private Game game;
     private LearningPointer lp;
     private readonly int levelNum = 2;
-    private readonly string levelKey = "Rec_03";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -14,7 +13,7 @@ public class Level_3 : MonoBehaviour
     private void Start()
     {
         game.StartAnyLevel();
-        if (RecData.ContinueGame == RecData.AvailableLevels) { Learning(); }
+        if (levelNum == Game.TimelyAvailable) { Learning(); }
         else
         {
             game.TabloOn();
@@ -34,7 +33,7 @@ public class Level_3 : MonoBehaviour
         game.StoikaOnly.transform.GetChild(16).GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
         Invoke(nameof(Go), 4f);
     }
-    private void Go() => game.TheFirstFew(3, 3.4f, 4.0f,2, levelKey, levelNum); //CHECK
+    private void Go() => game.TheFirstFew(3, 3.4f, 4.0f,2, levelNum); //CHECK
     private void Learning()
     {
         game.learn = true;

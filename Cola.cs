@@ -11,7 +11,7 @@ public class Cola : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHa
     private AudioSource audioSource;
     private void Awake()
     {
-        if (RecData.ContinueGame < RecData.canCookCola) { transform.parent.gameObject.SetActive(false); }
+        if (Game.TimelyContinue < RecData.canCookCola) { transform.parent.gameObject.SetActive(false); }
     }
     private void Start()
     {
@@ -52,14 +52,18 @@ public class Cola : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHa
         {
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
-            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().CheckingForDrags(); }
-            BackHome();
+            else if (hit.transform.parent.gameObject.name == "OnScene") { Checking(); }
         }
-        else { BackHome(); }
+        BackHome();
+    }
+    private void Checking()
+    {
+        hit.transform.GetComponent<AnyPerson>().CheckingForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
+        dg.isDragging = false;
     }
 }

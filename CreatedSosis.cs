@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,7 +17,7 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
     {
         drag = transform.parent.parent.GetComponent<DraggingComponent>();
         dg = Camera.main.GetComponent<Drag>();
-        if (RecData.ContinueGame == 0 && RecData.AvailableLevels == 0 && transform.GetSiblingIndex() == 0)
+        if (Game.TimelyContinue == 0 && Game.TimelyAvailable == 0 && transform.GetSiblingIndex() == 0)
         {
             transform.gameObject.AddComponent<L_CreatedSosis>();
         }
@@ -110,19 +109,25 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
             else if (hit.transform.gameObject.name == "HotDog") { FoodIsDone(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else if (hit.transform.gameObject.name == "Trash") { Trash(); }
             else { BackHome(); }
         }
         else { BackHome(); }
+    }
+    private void FoodIsDone()
+    {
+        drag.MakeFoodDone("Sosis", hit.transform.GetComponent<SpriteRenderer>(), drag.sosiska, drag.hotdog);
+        dg.isDragging = false;
+    }
+    private void Trash()
+    {
+        hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
+        dg.isDragging = false;
         timer = true;
-    }
-    private void FoodIsDone()
-    {
-        drag.MakeFoodDone("Sosis", hit.transform.GetComponent<SpriteRenderer>(), drag.sosiska, drag.hotdog);
     }
 }

@@ -4,7 +4,6 @@ public class Level_14 : MonoBehaviour //стакан - 1 стрелка - доступный равен 1
 {
     private Game game;
     private readonly int levelNum = 13;
-    private readonly string levelKey = "Rec_14";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_14 : MonoBehaviour //стакан - 1 стрелка - доступный равен 1
     {
         game.TimerForLevel();
     }
-    private void Go() => game.TheFirstFew(4, 3.1f, 3.8f,3, levelKey, levelNum); //CHECK
+    private void Go() => game.TheFirstFew(4, 3.1f, 3.8f,3, levelNum); //CHECK
 }

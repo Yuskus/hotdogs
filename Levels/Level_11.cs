@@ -5,7 +5,6 @@ public class Level_11 : MonoBehaviour //ONION //только нарисовать и добавить сам
     private Game game;
     private LearningPointer lp;
     private readonly int levelNum = 10;
-    private readonly string levelKey = "Rec_11";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -14,7 +13,7 @@ public class Level_11 : MonoBehaviour //ONION //только нарисовать и добавить сам
     private void Start()
     {
         game.StartAnyLevel();
-        if (RecData.ContinueGame == RecData.AvailableLevels) { Learning(); }
+        if (levelNum == Game.TimelyAvailable) { Learning(); }
         else
         {
             game.TabloOn();
@@ -34,7 +33,7 @@ public class Level_11 : MonoBehaviour //ONION //только нарисовать и добавить сам
         game.StoikaOnly.transform.GetChild(16).GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
         Invoke(nameof(Go), 4f);
     }
-    public void Go() => game.TheFirstFew(4, 3.2f, 3.9f, 3, levelKey, levelNum);
+    public void Go() => game.TheFirstFew(4, 3.2f, 3.9f, 3, levelNum);
     private void Learning()
     {
         game.learn = true;

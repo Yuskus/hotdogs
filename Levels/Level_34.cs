@@ -4,7 +4,6 @@ public class Level_34 : MonoBehaviour
 {
     private Game game;
     private readonly int levelNum = 33;
-    private readonly string levelKey = "Rec_34";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_34 : MonoBehaviour
     {
         game.TimerForLevel();
     }
-    private void Go() => game.TheFirstFew(8, 2.6f, 3.5f, 4, levelKey, levelNum);
+    private void Go() => game.TheFirstFew(8, 2.6f, 3.5f, 4, levelNum);
 }

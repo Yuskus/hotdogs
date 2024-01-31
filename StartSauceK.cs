@@ -7,14 +7,12 @@ public class StartSauceK : MonoBehaviour, IDragHandler, IPointerDownHandler, IEn
     private Drag dg;
     private SpriteRenderer spRen;
     private RaycastHit2D hit;
-    private bool sauceAdded;
     private AudioClip audioClipK;
     private void Start()
     {
         drag = transform.parent.GetComponent<DraggingComponent>();
         dg = Camera.main.GetComponent<Drag>();
         spRen = GetComponent<SpriteRenderer>();
-        sauceAdded = false;
         audioClipK = Resources.Load<AudioClip>("Sounds/sauce 1");
         drag.audioSourceK = GetComponent<AudioSource>();
         drag.audioSourceK.clip = audioClipK;
@@ -48,23 +46,32 @@ public class StartSauceK : MonoBehaviour, IDragHandler, IPointerDownHandler, IEn
         {
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
-            else if (hit.transform.gameObject.name == "HotDog") { hit.transform.GetComponent<CreatedBulka>().AddSauce(); sauceAdded = true; }
-            else if (hit.transform.gameObject.name == "Burger") { hit.transform.GetComponent<CreatedBurger>().AddSauce(); sauceAdded = true; }
-            BackHome();
-            if (sauceAdded)
-            {
-                if (hit.transform.GetComponent<SpriteRenderer>().sprite.name is not "Bulochka" or "BulkaBurger") //check
-                {
-                    dg.SelectedObject = hit.transform.gameObject;
-                }
-                sauceAdded = false;
-            }
+            else if (hit.transform.gameObject.name == "HotDog") { SauceForHotDog(); }
+            else if (hit.transform.gameObject.name == "Burger") { SauceForBurger(); }
         }
-        else { BackHome(); }
+        BackHome();
+    }
+    private void SauceForHotDog()
+    {
+        hit.transform.GetComponent<CreatedBulka>().AddSauce();
+        if (hit.transform.GetComponent<SpriteRenderer>().sprite.name != "Bulochka")
+        {
+            dg.SelectedObject = hit.transform.gameObject;
+        }
+        dg.isDragging = false;
+    }
+    private void SauceForBurger()
+    {
+        hit.transform.GetComponent<CreatedBurger>().AddSauce();
+        if (hit.transform.GetComponent<SpriteRenderer>().sprite.name != "BulkaBurger")
+        {
+            dg.SelectedObject = hit.transform.gameObject;
+        }
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
+        dg.isDragging = false;
     }
 }

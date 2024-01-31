@@ -9,7 +9,7 @@ public class StartBulka : MonoBehaviour, IPointerDownHandler
     {
         dg = Camera.main.GetComponent<Drag>();
         StolHotDog = transform.parent.GetChild(3).gameObject;
-        if (RecData.ContinueGame == 0 && RecData.AvailableLevels == 0) { transform.gameObject.AddComponent<L_StartBulka>(); }
+        if (Game.TimelyContinue == 0 && Game.TimelyAvailable == 0) { transform.gameObject.AddComponent<L_StartBulka>(); }
     }
     public void OnPointerDown(PointerEventData eventData)
     {

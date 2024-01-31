@@ -66,16 +66,26 @@ public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, I
         {
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
-            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().CheckingForDrags(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else if (hit.transform.parent.gameObject.name == "OnScene") { Checking(); }
+            else if (hit.transform.gameObject.name == "Trash") { Trash(); }
             else { BackHome(); }
         }
         else { BackHome(); }
+    }
+    private void Checking()
+    {
+        hit.transform.GetComponent<AnyPerson>().CheckingForDrags();
+        dg.isDragging = false;
+    }
+    private void Trash()
+    {
+        hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeSelectedWithSauce();
+        dg.isDragging = false;
     }
     public void AddSauce()
     {

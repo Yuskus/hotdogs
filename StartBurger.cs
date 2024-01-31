@@ -7,7 +7,7 @@ public class StartBurger : MonoBehaviour, IPointerDownHandler
     private GameObject StolBurger;
     private void Awake()
     {
-        if (RecData.ContinueGame < RecData.canCookBurger) { transform.gameObject.SetActive(false); }
+        if (Game.TimelyContinue < RecData.canCookBurger) { transform.gameObject.SetActive(false); }
     }
     private void Start()
     {

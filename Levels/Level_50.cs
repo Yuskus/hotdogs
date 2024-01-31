@@ -4,7 +4,6 @@ public class Level_50 : MonoBehaviour //COLA  //вроде готово
 {
     private Game game;
     private readonly int levelNum = 49;
-    private readonly string levelKey = "Rec_50";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_50 : MonoBehaviour //COLA  //вроде готово
     {
         game.TimerForLevel();
     }
-    public void Go() => game.TheFirstFew(10, 2.2f, 3.0f, 5, levelKey, levelNum);
+    public void Go() => game.TheFirstFew(10, 2.2f, 3.0f, 5, levelNum);
 }

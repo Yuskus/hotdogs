@@ -7,7 +7,7 @@ public class StartOnion : MonoBehaviour, IPointerDownHandler
     private GameObject[] Onion;
     private void Awake()
     {
-        if (RecData.ContinueGame < RecData.canCookOnion) { transform.gameObject.SetActive(false); }
+        if (Game.TimelyContinue < RecData.canCookOnion) { transform.gameObject.SetActive(false); }
     }
     private void Start()
     {

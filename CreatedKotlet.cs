@@ -104,19 +104,25 @@ public class CreatedKotlet : MonoBehaviour, IDragHandler, IPointerDownHandler, I
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
             else if (hit.transform.gameObject.name == "Burger") { FoodIsDone(); }
-            else if (hit.transform.gameObject.name == "Trash") { hit.transform.GetComponent<Trash>().TrashForDrags(); }
+            else if (hit.transform.gameObject.name == "Trash") { Trash(); }
             else { BackHome(); }
         }
         else { BackHome(); }
+    }
+    private void FoodIsDone()
+    {
+        drag.MakeFoodDone("Kotlet", hit.transform.GetComponent<SpriteRenderer>(), drag.kotleta, drag.burger);
+        dg.isDragging = false;
+    }
+    private void Trash()
+    {
+        hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
+        dg.isDragging = false;
         timer = true;
-    }
-    private void FoodIsDone()
-    {
-        drag.MakeFoodDone("Kotlet", hit.transform.GetComponent<SpriteRenderer>(), drag.kotleta, drag.burger);
     }
 }

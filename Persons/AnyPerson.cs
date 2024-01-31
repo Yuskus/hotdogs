@@ -44,8 +44,7 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
         bodySR = transform.GetChild(0).GetComponent<SpriteRenderer>();
         faceSR = transform.GetChild(1).GetComponent<SpriteRenderer>();
         hairSR = transform.GetChild(2).GetComponent<SpriteRenderer>();
-        indexOfLevel = RecData.ContinueGame + 1; //reading
-        transform.gameObject.AddComponent(System.Type.GetType("Pers_" + indexOfLevel));
+        transform.gameObject.AddComponent(System.Type.GetType("Pers_" + game.indexOfLevel));
     }
     public void AlwaysAtStart(float factorOfWalkSpeed, float runSpeed, float bonusPayLimit, int procentOfGoodPeople) //при вызове клиента на сцену в методе он энейбл
     {
@@ -192,8 +191,7 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
     }
     public bool TheClientLeaves() //protects value
     {
-        if (game.OnScene.transform.childCount == 0 || (game.OnScene.transform.childCount == 1 && myEat.Count == 0 && !DidNotStopYet)) { return true; }
-        return false;
+        return myEat.Count == 0 && !DidNotStopYet;
     }
     public void InitializeMyFace() //protects value
     {

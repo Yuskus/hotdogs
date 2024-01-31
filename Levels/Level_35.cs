@@ -4,7 +4,6 @@ public class Level_35 : MonoBehaviour //ONION //только нарисовать и добавить сам
 {
     private Game game;
     private readonly int levelNum = 34;
-    private readonly string levelKey = "Rec_35";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_35 : MonoBehaviour //ONION //только нарисовать и добавить сам
     {
         game.TimerForLevel();
     }
-    public void Go() => game.TheFirstFew(8, 2.6f, 3.5f, 4, levelKey, levelNum);
+    public void Go() => game.TheFirstFew(8, 2.6f, 3.5f, 4, levelNum);
 }

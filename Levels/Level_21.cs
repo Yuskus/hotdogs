@@ -5,7 +5,6 @@ public class Level_21 : MonoBehaviour //горчица - 1 стрелка - доступный равен 8
     private Game game;
     private LearningPointer lp;
     private readonly int levelNum = 20;
-    private readonly string levelKey = "Rec_21";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -14,7 +13,7 @@ public class Level_21 : MonoBehaviour //горчица - 1 стрелка - доступный равен 8
     private void Start()
     {
         game.StartAnyLevel();
-        if (RecData.ContinueGame == RecData.AvailableLevels) { Learning(); }
+        if (levelNum == Game.TimelyAvailable) { Learning(); }
         else
         {
             game.TabloOn();
@@ -34,7 +33,7 @@ public class Level_21 : MonoBehaviour //горчица - 1 стрелка - доступный равен 8
         game.StoikaOnly.transform.GetChild(16).GetChild(0).GetComponent<BoxCollider2D>().enabled = true;
         Invoke(nameof(Go), 4f);
     }
-    private void Go() => game.TheFirstFew(6, 3f, 3.7f,3, levelKey, levelNum); //CHECK
+    private void Go() => game.TheFirstFew(6, 3f, 3.7f,3, levelNum); //CHECK
     private void Learning()
     {
         game.learn = true;

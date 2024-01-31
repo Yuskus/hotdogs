@@ -43,14 +43,18 @@ public class Free : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHa
         {
             hit = drag.Ray(eventData.position);
             if (hit.collider == null) { BackHome(); return; }
-            else if (hit.transform.parent.gameObject.name == "OnScene") { hit.transform.GetComponent<AnyPerson>().CheckingForDrags(); }
-            else { BackHome(); }
+            else if (hit.transform.parent.gameObject.name == "OnScene") { Checking(); }
         }
-        else { BackHome(); }
+        BackHome();
+    }
+    private void Checking()
+    {
+        hit.transform.GetComponent<AnyPerson>().CheckingForDrags();
         dg.isDragging = false;
     }
     private void BackHome()
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
+        dg.isDragging = false;
     }
 }

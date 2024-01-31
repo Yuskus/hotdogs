@@ -4,7 +4,6 @@ public class Level_17 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
 {
     private Game game;
     private readonly int levelNum = 16;
-    private readonly string levelKey = "Rec_17";
     private void Awake()
     {
         game = Camera.main.GetComponent<Game>();
@@ -20,5 +19,5 @@ public class Level_17 : MonoBehaviour //бургер,котлета - 2 стрелки - доступный р
     {
         game.TimerForLevel();
     }
-    private void Go() => game.TheFirstFew(5, 3.1f, 3.7f,3, levelKey, levelNum); //CHECK
+    private void Go() => game.TheFirstFew(5, 3.1f, 3.7f,3, levelNum); //CHECK
 }
