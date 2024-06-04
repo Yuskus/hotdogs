@@ -14,6 +14,7 @@ public class MenuButtons : MonoBehaviour //
     private bool move;
     private AudioClip[] audioClip;
     private AudioSource[] audioSource;
+    private string soundChanged = "";
     private void Awake()
     {
         Canvas = GameObject.FindGameObjectWithTag("Canvas");
@@ -46,7 +47,7 @@ public class MenuButtons : MonoBehaviour //
         Camera.main.GetComponent<FocusCamera>().CameraPos(Camera.main);
         data = GameObject.FindGameObjectWithTag("Saving").GetComponent<MyData>();
         data.CustomStart();
-        RecData.LoadStateOfSound();
+        RecData.LoadStateOfSound(ref soundChanged);
         ButtonSoundSwitcher();
         if (data.LvlRec[^1] > RecData.plans[^1]) { ButtonFire.SetActive(true); }
     }
@@ -122,7 +123,7 @@ public class MenuButtons : MonoBehaviour //
     }
     public void ButtonSoundSwitcher()
     {
-        if (RecData.IsSoundChanged()) ForAudioSwitcher("Sounds Off", 0);
+        if (soundChanged == "false") ForAudioSwitcher("Sounds Off", 0);
         else ForAudioSwitcher("Sounds On", 1);
     }
     private void ForAudioSwitcher(string text, int vol)
@@ -132,7 +133,7 @@ public class MenuButtons : MonoBehaviour //
     }
     public void ButtonSounds()
     {
-        RecData.SaveStateOfSound();
+        RecData.CangeAndSaveStateOfSound(ref soundChanged);
         ButtonSoundSwitcher();
     }
     public void SoundsOfButtons()

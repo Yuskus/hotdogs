@@ -233,8 +233,8 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
         {
             switch (game.forEatPhase[r])
             {
-                case "HotDog": myEat.Add((game.forEatPhase[r], Random.Range(0, option) + Flags.Code_Doneness + Flags.Code_HotDog, myEat.Count)); break;
-                case "Burger": myEat.Add((game.forEatPhase[r], Random.Range(0, option) + Flags.Code_Doneness + Flags.Code_Burger, myEat.Count)); break;
+                case "HotDog": myEat.Add((game.forEatPhase[r], Random.Range(0, option) + RecData.Code_Doneness + RecData.Code_HotDog, myEat.Count)); break;
+                case "Burger": myEat.Add((game.forEatPhase[r], Random.Range(0, option) + RecData.Code_Doneness + RecData.Code_Burger, myEat.Count)); break;
                 default: myEat.Add((game.forEatPhase[r], 0, myEat.Count)); break;
             }
         }
@@ -271,8 +271,8 @@ public class AnyPerson : MonoBehaviour, IPointerDownHandler //RandomIndex, Timer
             if (index == -1) { dg.SelectedObject.GetComponent<MyStartPlace>().BackHomeAsSelected(); return; }
             switch (dg.SelectedObject.name)
             {
-                case "HotDog": PriceBonus(Flags.Code_HotDog); break;
-                case "Burger": PriceBonus(Flags.Code_Burger); break;
+                case "HotDog": PriceBonus(RecData.Code_HotDog); break;
+                case "Burger": PriceBonus(RecData.Code_Burger); break;
             }
             WishListCheck();
         }

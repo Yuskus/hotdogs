@@ -31,7 +31,7 @@ public class CreatedBulka : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         addedG = false;
         addedO = false;
         audioSource.Play();
-        GetComponent<FoodCode>().index = Flags.Code_HotDog;
+        GetComponent<FoodCode>().index = RecData.Code_HotDog;
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -67,12 +67,12 @@ public class CreatedBulka : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         if (dg.SelectedObject == transform.gameObject && spRen.sprite.name != "Bulochka")
         {
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { BackHome(); return; }
+            if (hit.collider == null) { BackHome(false); return; }
             else if (hit.transform.parent.gameObject.name == "OnScene") { Checking(); }
             else if (hit.transform.gameObject.name == "Trash") { Trash(); }
-            else { BackHome(); }
+            else { BackHome(false); }
         }
-        else { BackHome(); }
+        else { BackHome(true); }
     }
     private void Checking()
     {
@@ -84,10 +84,10 @@ public class CreatedBulka : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
-    private void BackHome()
+    private void BackHome(bool drag)
     {
         GetComponent<MyStartPlace>().BackHomeSelectedWithSauce();
-        dg.isDragging = false;
+        dg.isDragging = drag;
     }
     public void AddSauce()
     {

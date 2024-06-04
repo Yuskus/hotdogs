@@ -30,7 +30,7 @@ public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, I
         addedG = false;
         addedO = false;
         audioSource.Play();
-        GetComponent<FoodCode>().index = Flags.Code_Burger;
+        GetComponent<FoodCode>().index = RecData.Code_Burger;
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -65,12 +65,12 @@ public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, I
         if (dg.SelectedObject == transform.gameObject && spRen.sprite.name != "BulkaBurger")
         {
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { BackHome(); return; }
+            if (hit.collider == null) { BackHome(false); return; }
             else if (hit.transform.parent.gameObject.name == "OnScene") { Checking(); }
             else if (hit.transform.gameObject.name == "Trash") { Trash(); }
-            else { BackHome(); }
+            else { BackHome(false); }
         }
-        else { BackHome(); }
+        else { BackHome(true); }
     }
     private void Checking()
     {
@@ -82,10 +82,10 @@ public class CreatedBurger : MonoBehaviour, IDragHandler, IPointerDownHandler, I
         hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
-    private void BackHome()
+    private void BackHome(bool drag)
     {
         GetComponent<MyStartPlace>().BackHomeSelectedWithSauce();
-        dg.isDragging = false;
+        dg.isDragging = drag;
     }
     public void AddSauce()
     {

@@ -43,35 +43,20 @@ public class Onion : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDow
             time += Time.deltaTime;
             switch (time)
             {
-                case > 7.0f:
-                    if (i != 2)
-                    {
-                        ChangeSprite(2);
-                        timer = false;
-                        AudioAndAnim(burntOut, false);
-                    }
-                    break;
-                case > 3.0f:
-                    if (i != 1)
-                    {
-                        ChangeSprite(1);
-                        AudioAndAnim(dzinn, true);
-                    }
-                    break;
+                case > 7.0f: if (i != 2) { ChangeSpriteAndAnim(2, burntOut, false); } break;
+                case > 3.0f: if (i != 1) { ChangeSpriteAndAnim(1, dzinn, true); } break;
             }
         }
     }
-    private void ChangeSprite(int ind)
+    private void ChangeSpriteAndAnim(int ind, AudioClip clip, bool isAnimAndTimerPlay)
     {
         i = ind;
         sR.sprite = drag.onion[i];
-    }
-    private void AudioAndAnim(AudioClip clip, bool isAnimPlay)
-    {
+        timer = isAnimAndTimerPlay;
         audioSource.clip = clip;
         audioSource.Play();
-        anim.enabled = isAnimPlay;
-        childSR.enabled = isAnimPlay;
+        anim.enabled = isAnimAndTimerPlay;
+        childSR.enabled = isAnimAndTimerPlay;
     }
     public void OnPointerDown(PointerEventData eventData)
     {

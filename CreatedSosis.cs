@@ -47,21 +47,8 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
             time += Time.deltaTime;
             switch (time)
             {
-                case > 13.0f:
-                    if (i != 3)
-                    {
-                        ChangeSprite(3);
-                        timer = false;
-                        AudioAndAnim(burntOut, false);
-                    }
-                    break;
-                case > 6.0f:
-                    if (i != 2)
-                    {
-                        ChangeSprite(2);
-                        AudioAndAnim(dzinn, true);
-                    }
-                    break;
+                case > 13.0f: if (i != 3) { ChangeSprite(3); AudioAndAnim(burntOut, false); } break;
+                case > 6.0f: if (i != 2) { ChangeSprite(2); AudioAndAnim(dzinn, true); } break;
                 case > 3.0f: if (i != 1) { ChangeSprite(1); } break;
             }
         }
@@ -71,12 +58,13 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         i = ind;
         sR.sprite = drag.sosiska[i];
     }
-    private void AudioAndAnim(AudioClip clip, bool isAnimPlay)
+    private void AudioAndAnim(AudioClip clip, bool isAnimAndTimerPlay)
     {
+        timer = isAnimAndTimerPlay;
         audioSource.clip = clip;
         audioSource.Play();
-        anim.enabled = isAnimPlay;
-        childSR.enabled = isAnimPlay;
+        anim.enabled = isAnimAndTimerPlay;
+        childSR.enabled = isAnimAndTimerPlay;
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -107,12 +95,12 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         if (dg.SelectedObject == transform.gameObject)
         {
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { BackHome(); return; }
+            if (hit.collider == null) { BackHome(false); return; }
             else if (hit.transform.gameObject.name == "HotDog") { FoodIsDone(); }
             else if (hit.transform.gameObject.name == "Trash") { Trash(); }
-            else { BackHome(); }
+            else { BackHome(false); }
         }
-        else { BackHome(); }
+        else { BackHome(true); }
     }
     private void FoodIsDone()
     {
@@ -124,10 +112,10 @@ public class CreatedSosis : MonoBehaviour, IPointerDownHandler, IBeginDragHandle
         hit.transform.GetComponent<Trash>().TrashForDrags();
         dg.isDragging = false;
     }
-    private void BackHome()
+    private void BackHome(bool drag)
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
-        dg.isDragging = false;
+        dg.isDragging = drag;
         timer = true;
     }
 }

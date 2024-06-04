@@ -97,7 +97,7 @@ public class DraggingComponent : MonoBehaviour
                     if (sR.gameObject.name == "HotDog") { obj.transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = O_HD_added[i]; }
                     else if (sR.gameObject.name == "Burger") { obj.transform.GetChild(2).GetComponent<SpriteRenderer>().sprite = O_B_added[i]; }
                     dg.SelectedObject.GetComponent<MyStartPlace>().BackHomeAndOff_Free();
-                    if (i == 1) { sR.gameObject.GetComponent<FoodCode>().index += Flags.Code_Onion; }
+                    if (i == 1) { sR.gameObject.GetComponent<FoodCode>().index += RecData.Code_Onion; }
                     addedO = true;
                 }
                 break;
@@ -118,7 +118,7 @@ public class DraggingComponent : MonoBehaviour
             audioSourceBulka.Play();
             dg.SelectedObject.GetComponent<MyStartPlace>().BackHomeAndOff_Free();
             dg.SelectedObject = sR.transform.gameObject;
-            if (i == 2) { dg.SelectedObject.GetComponent<FoodCode>().index += Flags.Code_Doneness; }
+            if (i == 2) { dg.SelectedObject.GetComponent<FoodCode>().index += RecData.Code_Doneness; }
         }
         else { if (dg.SelectedObject != dg.Zero) { dg.SelectedObject.GetComponent<MyStartPlace>().BackHomeAsSelected(); } }
     }

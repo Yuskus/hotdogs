@@ -49,11 +49,12 @@ public class StartSauceG : MonoBehaviour, IDragHandler, IPointerDownHandler, IEn
         if (dg.SelectedObject == transform.gameObject)
         {
             hit = drag.Ray(eventData.position);
-            if (hit.collider == null) { BackHome(); return; }
+            if (hit.collider == null) { BackHome(false); return; }
             else if (hit.transform.gameObject.name == "HotDog") { SauceForHotDog(); }
             else if (hit.transform.gameObject.name == "Burger") { SauceForBurger(); }
+            BackHome(false);
         }
-        BackHome();
+        else { BackHome(true); }
     }
     private void SauceForHotDog()
     {
@@ -62,7 +63,6 @@ public class StartSauceG : MonoBehaviour, IDragHandler, IPointerDownHandler, IEn
         {
             dg.SelectedObject = hit.transform.gameObject;
         }
-        dg.isDragging = false;
     }
     private void SauceForBurger()
     {
@@ -71,11 +71,10 @@ public class StartSauceG : MonoBehaviour, IDragHandler, IPointerDownHandler, IEn
         {
             dg.SelectedObject = hit.transform.gameObject;
         }
-        dg.isDragging = false;
     }
-    private void BackHome()
+    private void BackHome(bool drag)
     {
         GetComponent<MyStartPlace>().BackHomeAsSelected();
-        dg.isDragging = false;
+        dg.isDragging = drag;
     }
 }

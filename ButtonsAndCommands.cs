@@ -10,6 +10,7 @@ public class ButtonsAndCommands : MonoBehaviour
     private int indexOfLevel;
     private AudioClip[] audioClip;
     private AudioSource[] audioSource;
+    private string soundChanged = "";
     private void Start()
     {
         Canvas = GameObject.FindGameObjectWithTag("Canvas");
@@ -24,7 +25,7 @@ public class ButtonsAndCommands : MonoBehaviour
         audioSource[1].clip = audioClip[1];
         audioSource[1].loop = true;
         audioSource[1].Play();
-        RecData.LoadStateOfSound();
+        RecData.LoadStateOfSound(ref soundChanged);
         ButtonSoundSwitcher();
         audioSource[1].volume = 0;
         StartCoroutine(FadeOfSound(1f));
@@ -38,7 +39,7 @@ public class ButtonsAndCommands : MonoBehaviour
     }
     public void ButtonSoundSwitcher()
     {
-        if (RecData.IsSoundChanged()) ForAudioSwitcher("Sounds Off", 0);
+        if (soundChanged == "false") ForAudioSwitcher("Sounds Off", 0);
         else ForAudioSwitcher("Sounds On", 1);
     }
     private void ForAudioSwitcher(string text, int vol)
@@ -48,7 +49,7 @@ public class ButtonsAndCommands : MonoBehaviour
     }
     public void SoundButton() //גûםוסעט מעהוכüםמ
     {
-        RecData.SaveStateOfSound();
+        RecData.CangeAndSaveStateOfSound(ref soundChanged);
         ButtonSoundSwitcher();
     }
     public void ContinueButton() //גûםוסעט מעהוכüםמ
