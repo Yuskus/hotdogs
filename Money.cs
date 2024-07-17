@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
-using Unity.VisualScripting;
 
 public class Money : MonoBehaviour, IPointerDownHandler
 {
