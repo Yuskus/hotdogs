@@ -25,19 +25,17 @@ public class Money : MonoBehaviour, IPointerDownHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!dg.isDragging)
+        if (dg.isDragging) return;
+        if (transform.parent.gameObject == Parent) { MakeTextPref(); }
+        else
         {
-            if (transform.parent.gameObject == Parent) { MakeTextPref(); }
-            else
-            {
-                game.AllClients.GetComponent<HairList>().randomIndex.Add(number);
-                transform.parent.GetComponent<ParMoney>().WritingOutPrice(out price);
-                game.MySalary += price;
-                SetAct(number, true);
-                TextIs(number, price, "+");
-                Invoke(nameof(Vanish), 2f);
-                transform.gameObject.SetActive(false);
-            }
+            game.AllClients.GetComponent<HairList>().randomIndex.Add(number);
+            transform.parent.GetComponent<ParMoney>().WritingOutPrice(out price);
+            game.MySalary += price;
+            SetAct(number, true);
+            TextIs(number, price, "+");
+            Invoke(nameof(Vanish), 2f);
+            transform.gameObject.SetActive(false);
         }
         sound.Play();
         game.MoneyOnTable -= 1;
