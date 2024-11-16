@@ -46,7 +46,6 @@ public class MenuButtons : MonoBehaviour //
         offset2 = -35;
         Camera.main.GetComponent<FocusCamera>().CameraPos(Camera.main);
         data = GameObject.FindGameObjectWithTag("Saving").GetComponent<MyData>();
-        data.CustomStart();
         RecData.LoadStateOfSound(ref soundChanged);
         ButtonSoundSwitcher();
         if (data.LvlRec[^1] > RecData.plans[^1]) { ButtonFire.SetActive(true); }

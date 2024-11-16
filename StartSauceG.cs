@@ -8,12 +8,9 @@ public class StartSauceG : MonoBehaviour, IDragHandler, IPointerDownHandler, IEn
     private SpriteRenderer spRen;
     private RaycastHit2D hit;
     private AudioClip audioClipG;
-    private void Awake()
-    {
-        if (Game.TimelyContinue < RecData.canCookSauseG) { transform.gameObject.SetActive(false); }
-    }
     private void Start()
     {
+        if (Game.TimelyContinue < RecData.canCookSauseG) { transform.gameObject.SetActive(false); }
         drag = transform.parent.GetComponent<DraggingComponent>();
         dg = Camera.main.GetComponent<Drag>();
         spRen = GetComponent<SpriteRenderer>();

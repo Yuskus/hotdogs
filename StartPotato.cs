@@ -10,15 +10,12 @@ public class StartPotato : MonoBehaviour, IPointerDownHandler
     private GameObject Table;
     private AudioClip audioClip, doneFreeClip;
     private AudioSource audioSource;
-    private void Awake()
+    private void Start()
     {
-        if (Game.TimelyContinue < RecData.canCookFree || Game.TimelyContinue < 15 && Game.TimelyContinue > 9)
+        if (Game.TimelyContinue < RecData.canCookFree || (Game.TimelyContinue < 15 && Game.TimelyContinue > 9))
         {
             transform.gameObject.SetActive(false);
         }
-    }
-    private void Start()
-    {
         dg = Camera.main.GetComponent<Drag>();
         childSR = transform.GetChild(0).GetComponent<SpriteRenderer>();
         col = GetComponent<BoxCollider2D>();

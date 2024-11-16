@@ -5,12 +5,9 @@ public class StartOnion : MonoBehaviour, IPointerDownHandler
 {
     private Drag dg;
     private GameObject[] Onion;
-    private void Awake()
-    {
-        if (Game.TimelyContinue < RecData.canCookOnion) { transform.gameObject.SetActive(false); }
-    }
     private void Start()
     {
+        if (Game.TimelyContinue < RecData.canCookOnion) { transform.gameObject.SetActive(false); }
         dg = Camera.main.GetComponent<Drag>();
         Onion = new GameObject[2];
         for (int i = 0; i < 2; i++) { Onion[i] = transform.GetChild(i).GetChild(0).gameObject; }

@@ -227,10 +227,10 @@ public class Game : MonoBehaviour //check
     }
     private void SaveGame()
     {
-        if (mySalary > RecData.plans[_level])
+        if (mySalary >= RecData.plans[_level])
         {
             if (data.AvailableLevels == _level) { data.AvailableLevels++; }
-            data.ContinueGame = _level + 1;
+            data.ContinueGame++;
         }
         if (mySalary > data.LvlRec[_level])
         {

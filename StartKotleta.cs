@@ -4,15 +4,16 @@ using UnityEngine.EventSystems;
 public class StartKotleta : MonoBehaviour, IPointerDownHandler
 {
     private Drag dg;
-    private GameObject PlitaKotlet;
-    private void Awake()
-    {
-        if (Game.TimelyContinue < RecData.canCookBurger) { transform.gameObject.SetActive(false); }
-    }
+    private GameObject[] Kotletas;
     private void Start()
     {
+        if (Game.TimelyContinue < RecData.canCookBurger) { transform.gameObject.SetActive(false); }
         dg = Camera.main.GetComponent<Drag>();
-        PlitaKotlet = transform.parent.GetChild(2).gameObject;
+        Kotletas = new GameObject[]
+        {
+            transform.parent.GetChild(2).GetChild(0).gameObject,
+            transform.parent.GetChild(2).GetChild(1).gameObject
+        };
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -20,7 +21,7 @@ public class StartKotleta : MonoBehaviour, IPointerDownHandler
         {
             for (int i = 0; i < 2; i++)
             {
-                if (!PlitaKotlet.transform.GetChild(i).gameObject.activeInHierarchy) { PlitaKotlet.transform.GetChild(i).gameObject.SetActive(true); break; }
+                if (!Kotletas[i].activeInHierarchy) { Kotletas[i].SetActive(true); break; }
             }
         }
     }
